@@ -110,7 +110,6 @@ ul{list-style:none;}
 .hero-visual{position:relative;padding-bottom:20px;}
 .hero-photo-wrap{border-radius:var(--radius-lg);overflow:hidden;aspect-ratio:4/5;max-height:560px;position:relative;}
 .hero-photo{width:100%;height:100%;object-fit:cover;object-position:top center;display:block;filter:grayscale(100%);transition:filter 1.2s ease;}
-.hero-photo.in-view{filter:grayscale(0%);}
 
 /* ── STATS ── */
 .stats-wrap{background:var(--bg-alt);border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);}
@@ -362,31 +361,26 @@ ul{list-style:none;}
         <span class="service-number">01</span>
         <div class="service-title">Executive Assistant</div>
         <p class="service-desc">Calendar, inbox, travel, meeting prep and stakeholder communication handled with precision.</p>
-        <a href="#" class="service-arrow">Learn more <svg viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
       <div class="service-card fade-up">
         <span class="service-number">02</span>
         <div class="service-title">Operations & System Building</div>
         <p class="service-desc">Notion hubs, Airtable CRMs, SOPs and dashboards that keep businesses running smoothly.</p>
-        <a href="#" class="service-arrow">Learn more <svg viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
       <div class="service-card fade-up">
         <span class="service-number">03</span>
         <div class="service-title">Workflow & Automation</div>
         <p class="service-desc">Zapier flows, form integrations and lead management systems that work without manual effort.</p>
-        <a href="#" class="service-arrow">Learn more <svg viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
       <div class="service-card fade-up">
         <span class="service-number">04</span>
         <div class="service-title">Research & Data Management</div>
         <p class="service-desc">Business research, strategic reports, data cleaning, structuring and accurate data entry.</p>
-        <a href="#" class="service-arrow">Learn more <svg viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
       <div class="service-card fade-up">
         <span class="service-number">05</span>
         <div class="service-title">Email Marketing & Communication</div>
         <p class="service-desc">Email sequences, campaigns, correspondence management and follow up systems.</p>
-        <a href="#" class="service-arrow">Learn more <svg viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
     </div>
   </div>
@@ -520,12 +514,23 @@ ul{list-style:none;}
 // Grayscale photo reveal
 (function(){
   const photos=document.querySelectorAll('.hero-photo');
+
+  photos.forEach(photo => {
+    // Always start in grayscale
+    photo.style.filter = 'grayscale(100%)';
+    photo.style.transition = 'filter 1.2s ease';
+  });
+
   const obs=new IntersectionObserver((entries)=>{
     entries.forEach(e=>{
-      if(e.isIntersecting) e.target.classList.add('in-view');
-      else e.target.classList.remove('in-view');
+      if(e.isIntersecting){
+        e.target.style.filter='grayscale(0%)';
+      } else {
+        e.target.style.filter='grayscale(100%)';
+      }
     });
-  },{threshold:0.3});
+  },{threshold:0.4, rootMargin:'-60px 0px -60px 0px'});
+
   photos.forEach(p=>obs.observe(p));
 })();
 
