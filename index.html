@@ -1,420 +1,559 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tools Grid — Color Mode Preview</title>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paul Oladeinde — Executive Virtual Assistant</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --black:      #0F0F0F;
-    --black-soft: #1A1A1A;
-    --black-card: #222222;
-    --grey-line:  #2A2A2A;
-    --grey-mid:   #6B6B6B;
-    --white:      #F8F5F0;
-    --green:      #3A9E5F;
-    --green-pale: #EAF5EE;
-  }
+/* ── TOKENS ── */
+:root {
+  --black:      #0F0F0F;
+  --black-soft: #1A1A1A;
+  --black-card: #222222;
+  --grey-dark:  #3A3A3A;
+  --grey-mid:   #6B6B6B;
+  --grey-light: #ADADAD;
+  --grey-line:  #E2E2E2;
+  --white:      #F8F5F0;
+  --white-pure: #FFFFFF;
+  --green:      #3A9E5F;
+  --green-dark: #2D7A49;
+  --green-pale: #EAF5EE;
+  --bg:         #F8F5F0;
+  --bg-alt:     #F2EEE8;
+  --surface:    #FFFFFF;
+  --fg:         #0F0F0F;
+  --fg-soft:    #3A3A3A;
+  --fg-muted:   #6B6B6B;
+  --bd:         #E2E2E2;
+  --nav-bg:     rgba(248,245,240,0.94);
+  --font-display: 'Instrument Serif', serif;
+  --font-body:    'Plus Jakarta Sans', sans-serif;
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   20px;
+  --radius-full: 100px;
+  --shadow-sm:   0 2px 12px rgba(0,0,0,0.06);
+  --shadow-md:   0 8px 32px rgba(0,0,0,0.10);
+  --shadow-lg:   0 24px 64px rgba(0,0,0,0.14);
+  --transition:  0.3s ease;
+}
+[data-theme="dark"] {
+  --bg:       #0F0F0F;
+  --bg-alt:   #1A1A1A;
+  --surface:  #222222;
+  --fg:       #F8F5F0;
+  --fg-soft:  #ADADAD;
+  --fg-muted: #6B6B6B;
+  --bd:       #2A2A2A;
+  --nav-bg:   rgba(15,15,15,0.94);
+  --shadow-sm: 0 2px 12px rgba(0,0,0,0.3);
+  --shadow-md: 0 8px 32px rgba(0,0,0,0.4);
+  --shadow-lg: 0 24px 64px rgba(0,0,0,0.5);
+}
 
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body {
-    font-family: 'Inter', sans-serif;
-    transition: background 0.4s, color 0.4s;
-  }
+/* ── RESET ── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font-body);background:var(--bg);color:var(--fg);line-height:1.6;transition:background 0.5s,color 0.5s;overflow-x:hidden;}
+img{display:block;max-width:100%;}
+a{text-decoration:none;color:inherit;}
+ul{list-style:none;}
 
-  /* ── DARK ── */
-  [data-theme="dark"] body, body {
-    background: var(--black);
-    color: var(--white);
-  }
-  [data-theme="dark"] .tool-card {
-    background: var(--black-card);
-    border-color: var(--grey-line);
-  }
-  [data-theme="dark"] .tool-icon-wrap { background: #2A2A2A; }
-  [data-theme="dark"] .tool-name { color: var(--white); }
-  [data-theme="dark"] .tool-category { color: var(--grey-mid); }
-  [data-theme="dark"] .section-title { color: var(--white); }
-  [data-theme="dark"] .section-sub { color: var(--grey-mid); }
-  [data-theme="dark"] .tool-card:hover {
-    border-color: rgba(58,158,95,0.4);
-    background: #252525;
-  }
-  [data-theme="dark"] .tool-card:hover .tool-icon-wrap { background: #303030; }
+/* ── NAVBAR ── */
+.navbar{position:fixed;top:0;left:0;right:0;z-index:999;background:var(--nav-bg);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);transition:background 0.5s,border-color 0.5s;}
+.navbar-inner{max-width:1200px;margin:0 auto;padding:0 40px;height:68px;display:flex;align-items:center;justify-content:space-between;gap:32px;}
+.navbar-logo{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.navbar-logo-mark{width:36px;height:36px;border-radius:50%;background:var(--black);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;border:1px solid var(--bd);}
+[data-theme="dark"] .navbar-logo-mark{background:#222;border-color:#3A3A3A;}
+.logo-p{font-family:var(--font-display);font-size:1rem;color:var(--white);position:absolute;left:7px;top:50%;transform:translateY(-52%);}
+[data-theme="dark"] .logo-p{color:var(--white);}
+.logo-o{font-family:var(--font-display);font-size:1rem;font-style:italic;color:var(--green);position:absolute;right:5px;top:50%;transform:translateY(-52%);}
+.navbar-links{display:flex;align-items:center;gap:36px;}
+.navbar-links a{font-size:0.82rem;font-weight:400;color:var(--fg-muted);letter-spacing:0.04em;transition:color 0.2s;position:relative;}
+.navbar-links a::after{content:'';position:absolute;bottom:-3px;left:0;right:0;height:1px;background:var(--green);transform:scaleX(0);transition:transform 0.3s;}
+.navbar-links a:hover{color:var(--fg);}
+.navbar-links a:hover::after,.navbar-links a.active::after{transform:scaleX(1);}
+.navbar-links a.active{color:var(--fg);}
+.navbar-right{display:flex;align-items:center;gap:16px;}
+.theme-toggle{width:44px;height:24px;border-radius:100px;background:var(--bd);border:1.5px solid var(--bd);cursor:pointer;position:relative;transition:background 0.3s;flex-shrink:0;display:flex;align-items:center;padding:2px;}
+[data-theme="dark"] .theme-toggle{background:var(--green);border-color:var(--green);}
+.theme-toggle-thumb{width:16px;height:16px;border-radius:50%;background:white;transition:transform 0.3s;font-size:0.55rem;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,0.2);}
+[data-theme="dark"] .theme-toggle-thumb{transform:translateX(20px);}
+.navbar-cta{background:var(--black);color:var(--white);padding:10px 22px;border-radius:100px;font-size:0.8rem;font-weight:600;letter-spacing:0.04em;border:none;cursor:pointer;transition:background 0.2s,transform 0.2s;display:flex;align-items:center;gap:6px;font-family:var(--font-body);}
+.navbar-cta:hover{background:var(--green);transform:translateY(-1px);}
+[data-theme="dark"] .navbar-cta{background:var(--white);color:var(--black);}
+[data-theme="dark"] .navbar-cta:hover{background:var(--green);color:var(--white);}
+.navbar-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;}
+.navbar-hamburger span{width:22px;height:1.5px;background:var(--fg);border-radius:2px;display:block;transition:0.3s;}
+.navbar-mobile{display:none;flex-direction:column;padding:20px 40px 24px;border-top:1px solid var(--bd);background:var(--nav-bg);backdrop-filter:blur(14px);gap:18px;}
+.navbar-mobile.open{display:flex;}
+.navbar-mobile a{font-size:0.9rem;color:var(--fg-muted);}
 
-  /* ── LIGHT ── */
-  [data-theme="light"] body {
-    background: var(--white);
-    color: var(--black);
-  }
-  [data-theme="light"] .tool-card {
-    background: #FFFFFF;
-    border-color: #E2E2E2;
-  }
-  [data-theme="light"] .tool-icon-wrap { background: #F4F4F4; }
-  [data-theme="light"] .tool-name { color: var(--black); }
-  [data-theme="light"] .tool-category { color: #ADADAD; }
-  [data-theme="light"] .section-title { color: var(--black); }
-  [data-theme="light"] .section-sub { color: #6B6B6B; }
-  [data-theme="light"] .tool-card:hover {
-    border-color: var(--green);
-    background: #FAFAFA;
-    box-shadow: 0 12px 32px rgba(0,0,0,0.07);
-  }
-  [data-theme="light"] .tool-card:hover .tool-icon-wrap { background: var(--green-pale); }
+/* ── HERO ── */
+.hero{min-height:100vh;padding:120px 40px 80px;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.1fr 0.9fr;gap:64px;align-items:center;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;margin-bottom:24px;}
+.hero-eyebrow-line{width:28px;height:1.5px;background:var(--green);}
+.hero-eyebrow-text{font-size:0.72rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--green);}
+.hero-title{font-family:var(--font-display);font-size:clamp(2.8rem,5.5vw,4.4rem);font-weight:400;line-height:1.06;color:var(--fg);margin-bottom:22px;}
+.hero-title em{font-style:italic;color:var(--green);}
+.hero-desc{font-size:1rem;color:var(--fg-soft);line-height:1.85;font-weight:300;max-width:480px;margin-bottom:36px;}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;align-items:center;}
+.btn-primary{display:inline-flex;align-items:center;gap:10px;background:var(--black);color:var(--white);padding:14px 28px;border-radius:100px;font-size:0.85rem;font-weight:600;letter-spacing:0.04em;border:none;cursor:pointer;transition:background 0.2s,transform 0.2s,box-shadow 0.2s;font-family:var(--font-body);}
+.btn-primary:hover{background:var(--green);transform:translateY(-2px);box-shadow:0 8px 24px rgba(58,158,95,0.25);}
+[data-theme="dark"] .btn-primary{background:var(--white);color:var(--black);}
+[data-theme="dark"] .btn-primary:hover{background:var(--green);color:var(--white);}
+.btn-secondary{display:inline-flex;align-items:center;gap:10px;background:transparent;color:var(--fg);padding:14px 28px;border-radius:100px;font-size:0.85rem;font-weight:400;letter-spacing:0.04em;border:1.5px solid var(--bd);cursor:pointer;transition:border-color 0.2s,color 0.2s,transform 0.2s;font-family:var(--font-body);}
+.btn-secondary:hover{border-color:var(--black);transform:translateY(-2px);}
+[data-theme="dark"] .btn-secondary:hover{border-color:var(--white);}
+.hero-visual{position:relative;padding-bottom:20px;}
+.hero-photo-wrap{border-radius:var(--radius-lg);overflow:hidden;aspect-ratio:4/5;max-height:560px;position:relative;}
+.hero-photo{width:100%;height:100%;object-fit:cover;object-position:top center;display:block;filter:grayscale(100%);transition:filter 1.2s ease;}
+.hero-photo.in-view{filter:grayscale(0%);}
 
-  /* ── PAGE ── */
-  .page {
-    min-height: 100vh;
-    padding: 60px 40px 80px;
-  }
+/* ── STATS ── */
+.stats-wrap{background:var(--bg-alt);border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);}
+[data-theme="dark"] .stats-wrap{background:var(--bg-alt);}
+.stats-inner{max-width:1200px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:repeat(3,1fr);}
+.stat-item{padding:40px 20px;text-align:center;border-right:1px solid var(--bd);}
+.stat-item:last-child{border-right:none;}
+.stat-number{font-family:var(--font-display);font-size:2.8rem;font-weight:400;color:var(--fg);line-height:1;margin-bottom:6px;}
+.stat-number span{color:var(--green);}
+.stat-label{font-size:0.75rem;color:var(--fg-muted);letter-spacing:0.1em;text-transform:uppercase;}
 
-  /* Toggle */
-  .controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 56px;
-  }
-  .mode-label {
-    font-size: 0.78rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--grey-mid);
-  }
-  .toggle-switch {
-    width: 56px; height: 30px;
-    border-radius: 100px;
-    background: var(--grey-line);
-    border: none;
-    cursor: pointer;
-    position: relative;
-    transition: background 0.3s;
-    flex-shrink: 0;
-  }
-  [data-theme="light"] .toggle-switch { background: var(--green); }
-  .toggle-thumb {
-    position: absolute;
-    top: 3px; left: 3px;
-    width: 24px; height: 24px;
-    border-radius: 50%;
-    background: white;
-    transition: transform 0.3s;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 0.75rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  }
-  [data-theme="light"] .toggle-thumb { transform: translateX(26px); }
+/* ── TICKER ── */
+.ticker{background:var(--black);padding:15px 0;overflow:hidden;}
+[data-theme="dark"] .ticker{background:var(--bg-alt);border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);}
+.ticker-track{display:flex;gap:52px;animation:ticker-scroll 24s linear infinite;width:max-content;}
+@keyframes ticker-scroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+.ticker-item{display:flex;align-items:center;gap:12px;font-size:0.73rem;color:rgba(248,245,240,0.4);letter-spacing:0.1em;text-transform:uppercase;font-weight:400;white-space:nowrap;}
+[data-theme="dark"] .ticker-item{color:rgba(248,245,240,0.2);}
+.ticker-dot{width:4px;height:4px;border-radius:50%;background:var(--green);flex-shrink:0;}
 
-  /* Section header */
-  .section-eyebrow {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    justify-content: center;
-    margin-bottom: 12px;
-  }
-  .eyebrow-line { width: 24px; height: 1.5px; background: var(--green); }
-  .eyebrow-text {
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--green);
-  }
-  .section-title {
-    font-family: 'Instrument Serif', serif;
-    font-size: clamp(1.8rem, 3vw, 2.4rem);
-    font-weight: 400;
-    text-align: center;
-    margin-bottom: 8px;
-    transition: color 0.4s;
-  }
-  .section-title em { font-style: italic; color: var(--green); }
-  .section-sub {
-    font-size: 0.88rem;
-    text-align: center;
-    font-weight: 300;
-    margin-bottom: 48px;
-    transition: color 0.4s;
-  }
+/* ── SECTION SHARED ── */
+.section{padding:100px 40px;max-width:1200px;margin:0 auto;}
+.section-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.section-eyebrow-line{width:28px;height:1.5px;background:var(--green);flex-shrink:0;}
+.section-eyebrow-text{font-size:0.72rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--green);}
+.section-title{font-family:var(--font-display);font-size:clamp(1.9rem,3.2vw,2.8rem);font-weight:400;color:var(--fg);margin-bottom:14px;line-height:1.12;}
+.section-title em{font-style:italic;color:var(--green);}
+.section-subtitle{font-size:0.95rem;color:var(--fg-soft);line-height:1.8;font-weight:300;max-width:520px;}
+.link-arrow{display:inline-flex;align-items:center;gap:8px;font-size:0.85rem;font-weight:600;color:var(--fg);letter-spacing:0.02em;transition:gap 0.2s,color 0.2s;cursor:pointer;}
+.link-arrow svg{width:16px;height:16px;transition:transform 0.2s;}
+.link-arrow:hover{color:var(--green);gap:14px;}
+.link-arrow:hover svg{transform:translate(2px,-2px);}
 
-  /* Grid */
-  .tools-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 14px;
-    max-width: 920px;
-    margin: 0 auto;
-  }
+/* ── SERVICES ── */
+.services-wrap{background:var(--bg-alt);border-bottom:1px solid var(--bd);}
+[data-theme="dark"] .services-wrap{background:var(--bg-alt);}
+.services-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px;gap:24px;flex-wrap:wrap;}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+.service-card{background:var(--surface);border-radius:var(--radius-lg);padding:32px 28px;border:1px solid var(--bd);transition:border-color 0.2s,transform 0.2s,box-shadow 0.2s;}
+.service-card:hover{border-color:var(--black);transform:translateY(-4px);box-shadow:var(--shadow-md);}
+[data-theme="dark"] .service-card:hover{border-color:var(--white);}
+.service-number{font-family:var(--font-display);font-size:0.85rem;font-style:italic;color:var(--green);margin-bottom:16px;display:block;}
+.service-title{font-family:var(--font-display);font-size:1.1rem;font-weight:400;color:var(--fg);margin-bottom:10px;line-height:1.3;}
+.service-desc{font-size:0.85rem;color:var(--fg-soft);line-height:1.75;font-weight:300;}
+.service-arrow{display:inline-flex;align-items:center;gap:6px;margin-top:20px;font-size:0.78rem;font-weight:600;color:var(--fg-muted);transition:color 0.2s,gap 0.2s;cursor:pointer;}
+.service-arrow svg{width:14px;height:14px;transition:transform 0.2s;}
+.service-card:hover .service-arrow{color:var(--green);gap:10px;}
+.service-card:hover .service-arrow svg{transform:translate(2px,-2px);}
 
-  .tool-card {
-    border-radius: 16px;
-    padding: 28px 16px 22px;
-    border: 1px solid;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    cursor: default;
-    transition: border-color 0.25s, transform 0.25s, background 0.25s, box-shadow 0.25s;
-    position: relative;
-    overflow: hidden;
-  }
-  .tool-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 50% 0%, rgba(58,158,95,0.07) 0%, transparent 70%);
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-  .tool-card:hover { transform: translateY(-5px); }
-  .tool-card:hover::before { opacity: 1; }
+/* ── WORK ── */
+.work-wrap{border-bottom:1px solid var(--bd);}
+.work-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px;gap:24px;flex-wrap:wrap;}
+.work-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.work-card{border-radius:var(--radius-lg);overflow:hidden;background:var(--surface);border:1px solid var(--bd);cursor:pointer;position:relative;opacity:0.35;filter:brightness(0.65);transition:opacity 0.8s ease,filter 0.8s ease,transform 0.3s ease,box-shadow 0.3s ease,border-color 0.3s ease;}
+.work-card.in-view{opacity:1;filter:brightness(1);}
+.work-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--grey-dark);}
+[data-theme="dark"] .work-card:hover{border-color:var(--grey-mid);}
+.work-card-img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block;}
+.work-card-body{padding:22px 24px 26px;}
+.work-card-tag{font-size:0.68rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--green);margin-bottom:10px;display:block;}
+.work-card-title{font-family:var(--font-display);font-size:1.05rem;font-weight:400;color:var(--fg);margin-bottom:8px;line-height:1.3;}
+.work-card-desc{font-size:0.83rem;color:var(--fg-soft);line-height:1.7;font-weight:300;}
+.work-card-arrow{position:absolute;bottom:24px;right:24px;width:38px;height:38px;border-radius:50%;background:var(--black);border:none;display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(0.6);transition:opacity 0.25s ease,transform 0.25s ease;pointer-events:none;cursor:pointer;}
+[data-theme="dark"] .work-card-arrow{background:var(--white);}
+.work-card-arrow svg{width:16px;height:16px;fill:none;stroke:var(--white);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+[data-theme="dark"] .work-card-arrow svg{stroke:var(--black);}
+.work-card.tapped .work-card-arrow{opacity:1;transform:scale(1);pointer-events:all;}
 
-  .tool-icon-wrap {
-    width: 56px; height: 56px;
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px;
-    transition: background 0.25s;
-  }
-  .tool-icon-wrap img {
-    width: 34px; height: 34px;
-    object-fit: contain;
-    transition: opacity 0.3s;
-  }
-  .tool-name {
-    font-size: 0.82rem;
-    font-weight: 500;
-    text-align: center;
-    line-height: 1.3;
-    transition: color 0.4s;
-  }
-  .tool-category {
-    font-size: 0.62rem;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    text-align: center;
-    transition: color 0.4s;
-  }
+/* ── CTA BANNER ── */
+.cta-banner{background:var(--black);padding:100px 40px;text-align:center;}
+[data-theme="dark"] .cta-banner{background:var(--bg-alt);border-top:1px solid var(--bd);}
+.cta-banner-inner{max-width:680px;margin:0 auto;}
+.cta-title{font-family:var(--font-display);font-size:clamp(2rem,4vw,3.2rem);font-weight:400;color:var(--white);line-height:1.15;margin-bottom:18px;}
+[data-theme="dark"] .cta-title{color:var(--fg);}
+.cta-title em{font-style:italic;color:var(--green);}
+.cta-sub{font-size:0.95rem;color:rgba(248,245,240,0.5);line-height:1.8;margin-bottom:36px;font-weight:300;}
+[data-theme="dark"] .cta-sub{color:var(--fg-muted);}
+.btn-cta{display:inline-flex;align-items:center;gap:10px;background:var(--white);color:var(--black);padding:16px 36px;border-radius:100px;font-size:0.88rem;font-weight:700;letter-spacing:0.04em;border:none;cursor:pointer;transition:background 0.2s,transform 0.2s,box-shadow 0.2s;font-family:var(--font-body);}
+.btn-cta:hover{background:var(--green);color:var(--white);transform:translateY(-2px);box-shadow:0 12px 32px rgba(58,158,95,0.3);}
+[data-theme="dark"] .btn-cta{background:var(--green);color:var(--white);}
 
-  /* Note */
-  .mode-note {
-    text-align: center;
-    margin-top: 48px;
-    font-size: 0.78rem;
-    color: var(--grey-mid);
-    font-weight: 300;
-    letter-spacing: 0.02em;
-  }
-  .mode-note strong { color: var(--green); font-weight: 600; }
+/* ── FOOTER ── */
+.footer{background:var(--black);padding:28px 40px;border-top:1px solid #1A1A1A;}
+[data-theme="dark"] .footer{background:#070F0A;border-top:1px solid #111;}
+.footer-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:24px;}
+.footer-logo{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.footer-logo-mark{width:32px;height:32px;border-radius:50%;background:#222;border:1px solid #2A2A2A;display:flex;align-items:center;justify-content:center;position:relative;}
+.footer-logo-mark .logo-p{font-family:var(--font-display);font-size:0.9rem;color:var(--white);position:absolute;left:5px;top:50%;transform:translateY(-52%);}
+.footer-logo-mark .logo-o{font-family:var(--font-display);font-size:0.9rem;font-style:italic;color:var(--green);position:absolute;right:4px;top:50%;transform:translateY(-52%);}
+.footer-copy{font-size:0.78rem;color:rgba(248,245,240,0.3);letter-spacing:0.04em;text-align:center;flex:1;}
+.footer-socials{display:flex;align-items:center;gap:18px;flex-shrink:0;}
+.footer-social-link{width:34px;height:34px;border-radius:50%;border:1px solid #2A2A2A;display:flex;align-items:center;justify-content:center;transition:border-color 0.2s,background 0.2s,transform 0.2s;}
+.footer-social-link:hover{border-color:var(--green);background:rgba(58,158,95,0.08);transform:translateY(-2px);}
+.footer-social-link svg{width:15px;height:15px;fill:rgba(248,245,240,0.4);transition:fill 0.2s;}
+.footer-social-link:hover svg{fill:var(--green);}
 
-  @media (max-width: 700px) {
-    .tools-grid { grid-template-columns: repeat(3,1fr); }
-    .page { padding: 40px 20px 60px; }
-  }
-  @media (max-width: 460px) {
-    .tools-grid { grid-template-columns: repeat(2,1fr); }
-  }
+/* ── FADE UP ── */
+.fade-up{opacity:0;transform:translateY(28px);transition:opacity 0.7s ease,transform 0.7s ease;}
+.fade-up.visible{opacity:1;transform:translateY(0);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .navbar-links{display:none;}
+  .navbar-hamburger{display:flex;}
+  .navbar-inner{padding:0 24px;}
+  .hero{grid-template-columns:1fr;padding:100px 24px 60px;gap:48px;}
+  .hero-visual{order:-1;}
+  .hero-photo-wrap{max-height:420px;aspect-ratio:3/2;}
+  .stats-inner{padding:0 24px;}
+  .section{padding:70px 24px;}
+  .services-grid{grid-template-columns:1fr;}
+  .work-grid{grid-template-columns:1fr;}
+  .cta-banner{padding:70px 24px;}
+  .footer{padding:24px;}
+  .footer-inner{flex-wrap:wrap;justify-content:center;gap:16px;}
+  .footer-copy{order:3;flex:100%;text-align:center;}
+}
+@media(max-width:600px){
+  .stats-inner{grid-template-columns:1fr;}
+  .stat-item{border-right:none;border-bottom:1px solid var(--bd);}
+  .stat-item:last-child{border-bottom:none;}
+}
 </style>
 </head>
-<html data-theme="dark">
 <body>
-<div class="page">
 
-  <!-- Toggle -->
-  <div class="controls">
-    <span class="mode-label">🌙 Dark</span>
-    <button class="toggle-switch" id="themeToggle" aria-label="Toggle theme">
-      <span class="toggle-thumb" id="toggleThumb">☀</span>
-    </button>
-    <span class="mode-label">Light ☀</span>
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="#" class="navbar-logo">
+      <div class="navbar-logo-mark">
+        <span class="logo-p">P</span>
+        <span class="logo-o">O</span>
+      </div>
+    </a>
+    <ul class="navbar-links">
+      <li><a href="#" class="active">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Work</a></li>
+      <li><a href="#">Services</a></li>
+    </ul>
+    <div class="navbar-right">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <span class="theme-toggle-thumb">☀</span>
+      </button>
+      <a href="#" class="navbar-cta">
+        Hire Me
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H4M10 2V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <button class="navbar-hamburger" id="hamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </div>
-
-  <!-- Header -->
-  <div class="section-eyebrow">
-    <span class="eyebrow-line"></span>
-    <span class="eyebrow-text">Tools & Tech</span>
-    <span class="eyebrow-line"></span>
+  <div class="navbar-mobile" id="mobileMenu">
+    <a href="#">Home</a>
+    <a href="#">About</a>
+    <a href="#">Work</a>
+    <a href="#">Services</a>
+    <a href="#" class="navbar-cta">Hire Me</a>
   </div>
-  <h2 class="section-title">The tools I <em>work with</em></h2>
-  <p class="section-sub">Platforms and software I use daily to keep operations running smoothly.</p>
+</nav>
 
-  <!-- Grid -->
-  <div class="tools-grid" id="toolsGrid">
-
-    <div class="tool-card">
-      <div class="tool-icon-wrap">
-        <img class="tool-icon" data-name="notion" src="https://cdn.simpleicons.org/notion/ffffff" alt="Notion" />
-      </div>
-      <div class="tool-name">Notion</div>
-      <div class="tool-category">Productivity</div>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span class="hero-eyebrow-line"></span>
+      <span class="hero-eyebrow-text">Executive Virtual Assistant</span>
     </div>
-
-    <div class="tool-card">
-      <div class="tool-icon-wrap">
-        <img class="tool-icon" data-name="airtable" src="https://cdn.simpleicons.org/airtable/ffffff" alt="Airtable" />
-      </div>
-      <div class="tool-name">Airtable</div>
-      <div class="tool-category">Database</div>
+    <h1 class="hero-title">Paul<br /><em>Oladeinde.</em></h1>
+    <p class="hero-desc">I support CEOs, MDs, and founders remotely. Managing the details so they can focus on what matters. From calendar and inbox to systems, operations and automation, I keep things running.</p>
+    <div class="hero-btns">
+      <a href="#" class="btn-primary">
+        View My Work
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="https://docs.google.com/document/d/1H6WPz-Lz0F-LM60LtPCtQ26mYNuiupVHP6JrSL6W5v4/edit?usp=sharing" target="_blank" class="btn-secondary">
+        Download CV
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v7M4 6l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
     </div>
-
-    <div class="tool-card">
-      <div class="tool-icon-wrap">
-        <img class="tool-icon" data-name="zapier" src="https://cdn.simpleicons.org/zapier/ffffff" alt="Zapier" />
-      </div>
-      <div class="tool-name">Zapier</div>
-      <div class="tool-category">Automation</div>
-    </div>
-
-    <div class="tool-card">
-      <div class="tool-icon-wrap">
-        <img class="tool-icon" data-name="slack" src="https://cdn.simpleicons.org/slack/ffffff" alt="Slack" />
-      </div>
-      <div class="tool-name">Slack</div>
-      <div class="tool-category">Communication</div>
-    </div>
-
-    <div class="tool-card">
-      <div class="tool-icon-wrap">
-        <img class="tool-icon" data-name="gmail" src="https://cdn.simpleicons.org/gmail/ffffff" alt="Gmail" />
-      </div>
-      <div class="tool-name">Gmail</div>
-      <div class="tool-category">Google Workspace</div>
-    </div>
-
-    <div class="tool-card">
-      <div class="tool-icon-wrap">
-        <img class="tool-icon" data-name="googlecalendar" src="https://cdn.simpleicons.org/googlecalendar/ffffff" alt="Google Calendar" />
-      </div>
-      <div class="tool-name">Google Calendar</div>
-      <div class="tool-category">Scheduling</div>
-    </div>
-
-    <div class="tool-card">
-      <div class="tool-icon-wrap">
-        <img class="tool-icon" data-name="hubspot" src="https://cdn.simpleicons.org/hubspot/ffffff" alt="HubSpot" />
-      </div>
-      <div class="tool-name">HubSpot</div>
-      <div class="tool-category">CRM</div>
-    </div>
-
-    <div class="tool-card">
-      <div class="tool-icon-wrap">
-        <img class="tool-icon" data-name="zoom" src="https://cdn.simpleicons.org/zoom/ffffff" alt="Zoom" />
-      </div>
-      <div class="tool-name">Zoom</div>
-      <div class="tool-category">Meetings</div>
-    </div>
-
-    <div class="tool-card">
-      <div class="tool-icon-wrap">
-        <img class="tool-icon" data-name="microsoftoffice" src="https://cdn.simpleicons.org/microsoftoffice/ffffff" alt="Microsoft Office" />
-      </div>
-      <div class="tool-name">Microsoft Office</div>
-      <div class="tool-category">Documents</div>
-    </div>
-
-    <div class="tool-card">
-      <div class="tool-icon-wrap">
-        <img class="tool-icon" data-name="trello" src="https://cdn.simpleicons.org/trello/ffffff" alt="Trello" />
-      </div>
-      <div class="tool-name">Trello</div>
-      <div class="tool-category">Project Mgmt</div>
-    </div>
-
-    <div class="tool-card">
-      <div class="tool-icon-wrap">
-        <img class="tool-icon" data-name="mailerlite" src="https://cdn.simpleicons.org/mailerlite/ffffff" alt="MailerLite" />
-      </div>
-      <div class="tool-name">MailerLite</div>
-      <div class="tool-category">Email Marketing</div>
-    </div>
-
-    <div class="tool-card">
-      <div class="tool-icon-wrap">
-        <img class="tool-icon" data-name="mailchimp" src="https://cdn.simpleicons.org/mailchimp/ffffff" alt="Mailchimp" />
-      </div>
-      <div class="tool-name">Mailchimp</div>
-      <div class="tool-category">Email Marketing</div>
-    </div>
-
-    <div class="tool-card">
-      <div class="tool-icon-wrap">
-        <img class="tool-icon" data-name="googledrive" src="https://cdn.simpleicons.org/googledrive/ffffff" alt="Google Drive" />
-      </div>
-      <div class="tool-name">Google Drive</div>
-      <div class="tool-category">Storage</div>
-    </div>
-
-    <div class="tool-card">
-      <div class="tool-icon-wrap">
-        <img class="tool-icon" data-name="whatsapp" src="https://cdn.simpleicons.org/whatsapp/ffffff" alt="WhatsApp" />
-      </div>
-      <div class="tool-name">WhatsApp Business</div>
-      <div class="tool-category">Communication</div>
-    </div>
-
-    <div class="tool-card">
-      <div class="tool-icon-wrap">
-        <img class="tool-icon" data-name="asana" src="https://cdn.simpleicons.org/asana/ffffff" alt="Asana" />
-      </div>
-      <div class="tool-name">Asana</div>
-      <div class="tool-category">Project Mgmt</div>
-    </div>
-
   </div>
+  <div class="hero-visual">
+    <div class="hero-photo-wrap">
+      <img src="https://res.cloudinary.com/dt8eebw4e/image/upload/v1781385770/PHOTO-2026-02-22-13-26-04_wy1bmb.jpg" alt="Paul Oladeinde" class="hero-photo" id="heroPhoto" />
+    </div>
+  </div>
+</section>
 
-  <p class="mode-note" id="modeNote">
-    🌙 <strong>Dark mode</strong> — icons are white & monochrome. Toggle to see brand colors.
-  </p>
-
+<!-- STATS -->
+<div class="stats-wrap">
+  <div class="stats-inner">
+    <div class="stat-item fade-up">
+      <div class="stat-number"><span>3</span>+</div>
+      <div class="stat-label">Years Experience</div>
+    </div>
+    <div class="stat-item fade-up">
+      <div class="stat-number"><span>10</span>+</div>
+      <div class="stat-label">Projects Delivered</div>
+    </div>
+    <div class="stat-item fade-up">
+      <div class="stat-number"><span>8</span>+</div>
+      <div class="stat-label">Tools Mastered</div>
+    </div>
+  </div>
 </div>
 
+<!-- TICKER -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span class="ticker-item"><span class="ticker-dot"></span>Calendar Management</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Inbox Management</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Travel Coordination</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Notion Systems</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Airtable CRM</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Zapier Automation</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>SOPs & Dashboards</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Email Marketing</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Research & Reports</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Calendar Management</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Inbox Management</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Travel Coordination</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Notion Systems</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Airtable CRM</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Zapier Automation</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>SOPs & Dashboards</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Email Marketing</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Research & Reports</span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<div class="services-wrap">
+  <div class="section">
+    <div class="services-head">
+      <div>
+        <div class="section-eyebrow">
+          <span class="section-eyebrow-line"></span>
+          <span class="section-eyebrow-text">What I Do</span>
+        </div>
+        <h2 class="section-title">Services I <em>provide</em></h2>
+        <p class="section-subtitle">From day-to-day executive support to full operational systems — I cover every base.</p>
+      </div>
+      <a href="#" class="link-arrow">View all services <svg viewBox="0 0 16 16" fill="none"><path d="M3 13L13 3M13 3H6M13 3V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+    <div class="services-grid">
+      <div class="service-card fade-up">
+        <span class="service-number">01</span>
+        <div class="service-title">Executive Assistant</div>
+        <p class="service-desc">Calendar, inbox, travel, meeting prep and stakeholder communication handled with precision.</p>
+        <a href="#" class="service-arrow">Learn more <svg viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+      <div class="service-card fade-up">
+        <span class="service-number">02</span>
+        <div class="service-title">Operations & System Building</div>
+        <p class="service-desc">Notion hubs, Airtable CRMs, SOPs and dashboards that keep businesses running smoothly.</p>
+        <a href="#" class="service-arrow">Learn more <svg viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+      <div class="service-card fade-up">
+        <span class="service-number">03</span>
+        <div class="service-title">Workflow & Automation</div>
+        <p class="service-desc">Zapier flows, form integrations and lead management systems that work without manual effort.</p>
+        <a href="#" class="service-arrow">Learn more <svg viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+      <div class="service-card fade-up">
+        <span class="service-number">04</span>
+        <div class="service-title">Research & Data Management</div>
+        <p class="service-desc">Business research, strategic reports, data cleaning, structuring and accurate data entry.</p>
+        <a href="#" class="service-arrow">Learn more <svg viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+      <div class="service-card fade-up">
+        <span class="service-number">05</span>
+        <div class="service-title">Email Marketing & Communication</div>
+        <p class="service-desc">Email sequences, campaigns, correspondence management and follow up systems.</p>
+        <a href="#" class="service-arrow">Learn more <svg viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WORK TEASER -->
+<div class="work-wrap">
+  <div class="section">
+    <div class="work-head">
+      <div>
+        <div class="section-eyebrow">
+          <span class="section-eyebrow-line"></span>
+          <span class="section-eyebrow-text">Selected Work</span>
+        </div>
+        <h2 class="section-title">Things I've <em>built</em></h2>
+      </div>
+      <a href="#" class="link-arrow">View all work <svg viewBox="0 0 16 16" fill="none"><path d="M3 13L13 3M13 3H6M13 3V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+    <div class="work-grid">
+      <div class="work-card" data-href="#">
+        <img src="https://res.cloudinary.com/dt8eebw4e/image/upload/v1781414258/Leads_pyydag.png" alt="Lead Management System" class="work-card-img" />
+        <div class="work-card-body">
+          <span class="work-card-tag">Operations & CRM</span>
+          <div class="work-card-title">Lead Management System & CRM</div>
+          <p class="work-card-desc">An Airtable based lead management CRM designed for real estate and sales pipeline operations.</p>
+        </div>
+        <button class="work-card-arrow" aria-label="View project">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M3 13L13 3M13 3H6M13 3V10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <div class="work-card" data-href="#">
+        <img src="https://res.cloudinary.com/dt8eebw4e/image/upload/v1781414180/One_day_today_will_be_your_favorite_story_to_tell_make_it_count__wlthsociety__Photos_by___lofipassion_1_mi59bo.webp" alt="Travel Planning" class="work-card-img" />
+        <div class="work-card-body">
+          <span class="work-card-tag">Travel & Logistics</span>
+          <div class="work-card-title">Travel Planning & Coordination</div>
+          <p class="work-card-desc">A multi-city executive travel workspace built in Notion covering a 10-city international itinerary.</p>
+        </div>
+        <button class="work-card-arrow" aria-label="View project">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M3 13L13 3M13 3H6M13 3V10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <div class="work-card" data-href="#">
+        <img src="https://res.cloudinary.com/dt8eebw4e/image/upload/v1781414599/IMG_1453_radjpb.jpg" alt="Workflow Automation" class="work-card-img" />
+        <div class="work-card-body">
+          <span class="work-card-tag">Workflow & Automation</span>
+          <div class="work-card-title">Booking & Lead Capture Automation</div>
+          <p class="work-card-desc">An end-to-end booking and lead capture automation built with Google Forms and Zapier for an events business.</p>
+        </div>
+        <button class="work-card-arrow" aria-label="View project">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M3 13L13 3M13 3H6M13 3V10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA BANNER -->
+<div class="cta-banner">
+  <div class="cta-banner-inner">
+    <h2 class="cta-title">Ready to work with someone <em>exceptional?</em></h2>
+    <p class="cta-sub">Let's talk about how I can support you. Send a quick message or book a call — I respond within 24 hours.</p>
+    <a href="#" class="btn-cta">
+      Let's Work Together
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <div class="footer-logo-mark">
+        <span class="logo-p">P</span>
+        <span class="logo-o">O</span>
+      </div>
+    </div>
+    <p class="footer-copy">&copy; 2026 Paul Oladeinde. All rights reserved.</p>
+    <div class="footer-socials">
+      <a href="https://www.linkedin.com/in/pauloladeinde" target="_blank" class="footer-social-link" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      </a>
+      <a href="https://x.com/A_Oladeinde19" target="_blank" class="footer-social-link" aria-label="X">
+        <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="https://www.threads.com/@pauloladeinde_" target="_blank" class="footer-social-link" aria-label="Threads">
+        <svg viewBox="0 0 24 24"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.964-.065-1.19.408-2.285 1.33-3.082.88-.76 2.119-1.207 3.583-1.291a13.853 13.853 0 0 1 3.02.142c-.126-.742-.375-1.332-.75-1.757-.513-.586-1.308-.883-2.366-.89h-.029c-.78 0-1.652.233-2.205.896l-1.595-1.325c.847-1.021 2.138-1.584 3.8-1.584h.039c3.016.025 4.815 1.79 5.028 4.919.14.002.278.006.416.012 1.242.057 2.316.409 3.192 1.047 1.12.807 1.875 2.018 2.25 3.603.585 2.475.114 5.006-1.285 6.56C19.218 23.266 16.94 23.98 12.186 24z"/></svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
 <script>
-  const html    = document.documentElement;
-  const toggle  = document.getElementById('themeToggle');
-  const thumb   = document.getElementById('toggleThumb');
-  const note    = document.getElementById('modeNote');
-  const icons   = document.querySelectorAll('.tool-icon');
+// Theme toggle
+(function(){
+  const html=document.documentElement;
+  const toggle=document.getElementById('themeToggle');
+  const thumb=toggle.querySelector('.theme-toggle-thumb');
+  const saved=localStorage.getItem('po-theme')||'light';
+  html.setAttribute('data-theme',saved);
+  thumb.textContent=saved==='dark'?'🌙':'☀';
+  toggle.addEventListener('click',()=>{
+    const next=html.getAttribute('data-theme')==='dark'?'light':'dark';
+    html.setAttribute('data-theme',next);
+    thumb.textContent=next==='dark'?'🌙':'☀';
+    localStorage.setItem('po-theme',next);
+  });
+})();
 
-  function setTheme(theme) {
-    html.setAttribute('data-theme', theme);
-    thumb.textContent = theme === 'dark' ? '☀' : '🌙';
+// Mobile menu
+(function(){
+  const btn=document.getElementById('hamburger');
+  const menu=document.getElementById('mobileMenu');
+  if(btn&&menu) btn.addEventListener('click',()=>menu.classList.toggle('open'));
+})();
 
-    icons.forEach(img => {
-      const name = img.dataset.name;
-      if (theme === 'dark') {
-        // White monochrome in dark mode
-        img.src = `https://cdn.simpleicons.org/${name}/ffffff`;
-      } else {
-        // Full brand colors in light mode
-        img.src = `https://cdn.simpleicons.org/${name}`;
+// Fade up
+(function(){
+  const els=document.querySelectorAll('.fade-up');
+  const obs=new IntersectionObserver((entries)=>{
+    entries.forEach((e,i)=>{
+      if(e.isIntersecting){
+        setTimeout(()=>e.target.classList.add('visible'),i*80);
+        obs.unobserve(e.target);
       }
     });
+  },{threshold:0.12});
+  els.forEach(el=>obs.observe(el));
+})();
 
-    note.innerHTML = theme === 'dark'
-      ? '🌙 <strong>Dark mode</strong> — icons are white & monochrome. Toggle to see brand colors.'
-      : '☀ <strong>Light mode</strong> — icons show in their real brand colors. Toggle to see monochrome.';
+// Grayscale photo reveal
+(function(){
+  const photos=document.querySelectorAll('.hero-photo');
+  const obs=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting) e.target.classList.add('in-view');
+      else e.target.classList.remove('in-view');
+    });
+  },{threshold:0.3});
+  photos.forEach(p=>obs.observe(p));
+})();
 
-    localStorage.setItem('theme', theme);
-  }
-
-  // Init
-  const saved = localStorage.getItem('theme') || 'dark';
-  setTheme(saved);
-
-  toggle.addEventListener('click', () => {
-    const current = html.getAttribute('data-theme');
-    setTheme(current === 'dark' ? 'light' : 'dark');
+// Work card illuminate + tap arrow
+(function(){
+  const cards=document.querySelectorAll('.work-card');
+  const obs=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting) e.target.classList.add('in-view');
+      else e.target.classList.remove('in-view');
+    });
+  },{threshold:0.2});
+  cards.forEach(c=>{
+    obs.observe(c);
+    c.addEventListener('click',()=>{
+      if(c.classList.contains('tapped')){
+        const href=c.dataset.href;
+        if(href&&href!=='#') window.location.href=href;
+      } else {
+        cards.forEach(x=>x.classList.remove('tapped'));
+        c.classList.add('tapped');
+      }
+    });
   });
+  document.addEventListener('click',e=>{
+    if(!e.target.closest('.work-card')) cards.forEach(c=>c.classList.remove('tapped'));
+  });
+})();
 </script>
 </body>
 </html>
