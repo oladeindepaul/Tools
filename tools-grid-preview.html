@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tools Grid Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black:     #0F0F0F;
+    --black-soft:#1A1A1A;
+    --black-card:#222222;
+    --grey-dark: #3A3A3A;
+    --grey-mid:  #6B6B6B;
+    --grey-line: #2A2A2A;
+    --white:     #F8F5F0;
+    --green:     #3A9E5F;
+    --green-pale:#EAF5EE;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--black);
+    color: var(--white);
+    min-height: 100vh;
+    padding: 60px 40px;
+  }
+
+  /* Toggle */
+  .controls {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 48px;
+  }
+  .toggle-btn {
+    padding: 10px 24px;
+    border-radius: 100px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+  .toggle-btn.light {
+    background: var(--white);
+    color: var(--black);
+    border: 1.5px solid var(--grey-line);
+  }
+  .toggle-btn.dark {
+    background: var(--black-soft);
+    color: var(--white);
+    border: 1.5px solid var(--grey-line);
+  }
+  .toggle-btn:hover { transform: translateY(-2px); }
+
+  /* Header */
+  .section-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    justify-content: center;
+  }
+  .eyebrow-line {
+    width: 24px; height: 1.5px;
+    background: var(--green);
+  }
+  .eyebrow-text {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--green);
+  }
+  .section-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    font-weight: 400;
+    text-align: center;
+    margin-bottom: 8px;
+    color: var(--white);
+  }
+  .section-title em { font-style: italic; color: var(--green); }
+  .section-sub {
+    font-size: 0.88rem;
+    color: var(--grey-mid);
+    text-align: center;
+    font-weight: 300;
+    margin-bottom: 48px;
+  }
+
+  /* GRID */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .tool-card {
+    background: var(--black-card);
+    border-radius: 16px;
+    padding: 28px 16px 22px;
+    border: 1px solid var(--grey-line);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    cursor: default;
+    transition: border-color 0.25s, transform 0.25s, background 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .tool-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(58,158,95,0.06) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .tool-card:hover {
+    border-color: rgba(58,158,95,0.4);
+    transform: translateY(-4px);
+    background: #252525;
+  }
+  .tool-card:hover::before { opacity: 1; }
+
+  .tool-icon-wrap {
+    width: 52px; height: 52px;
+    border-radius: 12px;
+    background: #2A2A2A;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    transition: background 0.25s;
+  }
+  .tool-card:hover .tool-icon-wrap { background: #303030; }
+
+  .tool-icon-wrap img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+  }
+
+  .tool-name {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--white);
+    text-align: center;
+    line-height: 1.3;
+  }
+  .tool-category {
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--grey-mid);
+    text-align: center;
+  }
+
+  /* LIGHT MODE */
+  body.light {
+    background: var(--white);
+  }
+  body.light .section-title { color: var(--black); }
+  body.light .section-sub { color: #6B6B6B; }
+  body.light .tool-card {
+    background: #FFFFFF;
+    border-color: #E2E2E2;
+  }
+  body.light .tool-card:hover {
+    background: #FAFAFA;
+    border-color: var(--green);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+  }
+  body.light .tool-icon-wrap { background: #F4F4F4; }
+  body.light .tool-card:hover .tool-icon-wrap { background: var(--green-pale); }
+  body.light .tool-name { color: var(--black); }
+  body.light .tool-category { color: #ADADAD; }
+
+  /* Responsive */
+  @media (max-width: 700px) {
+    .tools-grid { grid-template-columns: repeat(3, 1fr); }
+    body { padding: 40px 20px; }
+  }
+  @media (max-width: 480px) {
+    .tools-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="controls">
+  <button class="toggle-btn light" onclick="document.body.classList.add('light')">☀ Light Mode</button>
+  <button class="toggle-btn dark" onclick="document.body.classList.remove('light')">🌙 Dark Mode</button>
+</div>
+
+<div class="section-eyebrow">
+  <span class="eyebrow-line"></span>
+  <span class="eyebrow-text">Tools & Tech</span>
+  <span class="eyebrow-line"></span>
+</div>
+<h2 class="section-title">The tools I <em>work with</em></h2>
+<p class="section-sub">Platforms and software I use daily to keep operations running smoothly.</p>
+
+<div class="tools-grid">
+
+  <!-- Row 1 -->
+  <div class="tool-card">
+    <div class="tool-icon-wrap">
+      <img src="https://cdn.simpleicons.org/notion/ffffff" alt="Notion" />
+    </div>
+    <div class="tool-name">Notion</div>
+    <div class="tool-category">Productivity</div>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-icon-wrap">
+      <img src="https://cdn.simpleicons.org/airtable/ffffff" alt="Airtable" />
+    </div>
+    <div class="tool-name">Airtable</div>
+    <div class="tool-category">Database</div>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-icon-wrap">
+      <img src="https://cdn.simpleicons.org/zapier/ffffff" alt="Zapier" />
+    </div>
+    <div class="tool-name">Zapier</div>
+    <div class="tool-category">Automation</div>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-icon-wrap">
+      <img src="https://cdn.simpleicons.org/slack/ffffff" alt="Slack" />
+    </div>
+    <div class="tool-name">Slack</div>
+    <div class="tool-category">Communication</div>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-icon-wrap">
+      <img src="https://cdn.simpleicons.org/gmail/ffffff" alt="Gmail" />
+    </div>
+    <div class="tool-name">Gmail</div>
+    <div class="tool-category">Google Workspace</div>
+  </div>
+
+  <!-- Row 2 -->
+  <div class="tool-card">
+    <div class="tool-icon-wrap">
+      <img src="https://cdn.simpleicons.org/googlecalendar/ffffff" alt="Google Calendar" />
+    </div>
+    <div class="tool-name">Google Calendar</div>
+    <div class="tool-category">Scheduling</div>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-icon-wrap">
+      <img src="https://cdn.simpleicons.org/hubspot/ffffff" alt="HubSpot" />
+    </div>
+    <div class="tool-name">HubSpot</div>
+    <div class="tool-category">CRM</div>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-icon-wrap">
+      <img src="https://cdn.simpleicons.org/zoom/ffffff" alt="Zoom" />
+    </div>
+    <div class="tool-name">Zoom</div>
+    <div class="tool-category">Meetings</div>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-icon-wrap">
+      <img src="https://cdn.simpleicons.org/microsoftoffice/ffffff" alt="Microsoft Office" />
+    </div>
+    <div class="tool-name">Microsoft Office</div>
+    <div class="tool-category">Documents</div>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-icon-wrap">
+      <img src="https://cdn.simpleicons.org/trello/ffffff" alt="Trello" />
+    </div>
+    <div class="tool-name">Trello</div>
+    <div class="tool-category">Project Mgmt</div>
+  </div>
+
+  <!-- Row 3 -->
+  <div class="tool-card">
+    <div class="tool-icon-wrap">
+      <img src="https://cdn.simpleicons.org/mailerlite/ffffff" alt="MailerLite" />
+    </div>
+    <div class="tool-name">MailerLite</div>
+    <div class="tool-category">Email Marketing</div>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-icon-wrap">
+      <img src="https://cdn.simpleicons.org/mailchimp/ffffff" alt="Mailchimp" />
+    </div>
+    <div class="tool-name">Mailchimp</div>
+    <div class="tool-category">Email Marketing</div>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-icon-wrap">
+      <img src="https://cdn.simpleicons.org/googledrive/ffffff" alt="Google Drive" />
+    </div>
+    <div class="tool-name">Google Drive</div>
+    <div class="tool-category">Storage</div>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-icon-wrap">
+      <img src="https://cdn.simpleicons.org/whatsapp/ffffff" alt="WhatsApp" />
+    </div>
+    <div class="tool-name">WhatsApp Business</div>
+    <div class="tool-category">Communication</div>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-icon-wrap">
+      <img src="https://cdn.simpleicons.org/asana/ffffff" alt="Asana" />
+    </div>
+    <div class="tool-name">Asana</div>
+    <div class="tool-category">Project Mgmt</div>
+  </div>
+
+</div>
+
+</body>
+</html>
